@@ -1,7 +1,13 @@
 package com.karla.shipping_calculator.service;
 
 import com.karla.shipping_calculator.dtos.Order;
+import com.karla.shipping_calculator.strategies.ExpressShippingStrategy;
+import com.karla.shipping_calculator.strategies.PickupShippingStrategy;
+import com.karla.shipping_calculator.strategies.ShippingCalculatorStrategy;
+import com.karla.shipping_calculator.strategies.StandardShippingStrategy;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class ShippingCalculatorService {
@@ -10,21 +16,9 @@ public class ShippingCalculatorService {
         final Double weight = order.productWeight();
 
         return switch (order.type()){
-            case "express" -> calculateExpressShipping(weight);
-            case "standard" -> calculateStandardShipping(weight);
-            default -> calculatePickupShipping();
+            case "express" -> new ExpressShippingStrategy().calculateShipping(weight);
+            case "standard" -> new StandardShippingStrategy().calculateShipping(weight);
+            default -> new PickupShippingStrategy().calculateShipping(weight);
         };
-    }
-
-    private double calculateExpressShipping(double weight){
-        return 10.00 + 3 * weight;
-    }
-
-    private double calculateStandardShipping(double weight){
-        return 5.00 + 1.5 * weight;
-    }
-
-    private double calculatePickupShipping(){
-        return 0.00;
     }
 }
