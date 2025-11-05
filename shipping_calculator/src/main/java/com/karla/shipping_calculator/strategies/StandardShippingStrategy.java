@@ -1,5 +1,8 @@
 package com.karla.shipping_calculator.strategies;
 
+import org.springframework.stereotype.Component;
+
+@Component("standard")
 public class StandardShippingStrategy implements ShippingCalculatorStrategy {
     @Override
     public double calculateShipping(double weight) {
